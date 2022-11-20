@@ -20,7 +20,7 @@ class _AttendanceState extends State<Attendance> {
 
   @override
   void initState() {
-    _dataCollection = _getDataSource() as Map<DateTime, List<Meeting>>;
+    _dataCollection = _getDataSource() as Map<DateTime, List<Meeting>>?;
     _calendarDataSource = MeetingDataSource(<Meeting>[]);
     super.initState();
   }
