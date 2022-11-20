@@ -11,19 +11,19 @@ class Attendance extends StatefulWidget {
   State<Attendance> createState() => _AttendanceState();
 }
 
+Map<DateTime, List<Meeting>>? _dataCollection;
+
 class _AttendanceState extends State<Attendance> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
+  late var _calendarDataSource;
 
-  // List<Meeting> _getDataSource() {
-  //   final List<Meeting> meetings = <Meeting>[];
-  //   final DateTime today = DateTime.now();
-  //   final DateTime startTime =
-  //       DateTime(today.year, today.month, today.day, 10, 0, 0);
-  //   final DateTime endTime = startTime.add(const Duration(hours: 10));
-  //   meetings.add(Meeting('Conference', startTime, endTime, Colors.black12, ));
-  //   return meetings;
-  // }
+  @override
+  void initState() {
+    _dataCollection = _getDataSource() as Map<DateTime, List<Meeting>>;
+    _calendarDataSource = MeetingDataSource(<Meeting>[]);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,13 +129,27 @@ class _AttendanceState extends State<Attendance> {
               monthViewSettings: const MonthViewSettings(
                   appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
                   showAgenda: true),
-              dataSource: MeetingDataSource(_getDataSource()),
+              dataSource: _calendarDataSource,
               todayHighlightColor: Colors.transparent,
               todayTextStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                   fontSize: 18),
               view: CalendarView.month,
+              loadMoreWidgetBuilder: (BuildContext context,
+                  LoadMoreCallback loadMoreAppointments) {
+                return FutureBuilder(
+                  future: loadMoreAppointments(),
+                  builder: (context, snapshot) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Colors.blue),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           )
         ],
