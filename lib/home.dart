@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text(
-                                'Today\'s :',
+                                'Today\'s : ',
                                 style: TextStyle(fontSize: 18),
                               )
                             ],
