@@ -17,63 +17,148 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          Card(
+            child: Container(
+              height: 180,
+              padding: EdgeInsets.all(10),
+              child: Column(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.50,
-                    child: Card(
-                      margin: const EdgeInsets.all(10),
-                      elevation: 5,
-                      child: Column(children: const [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Total Items',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          '17',
-                          style: TextStyle(fontSize: 30),
-                        )
-                      ]),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        width: 74,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.43,
+                        child: const Text('Sold Items',
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: const Text('Score',
+                              style: TextStyle(fontSize: 18))),
+                    ],
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.50,
-                    child: Card(
-                      margin: const EdgeInsets.all(10),
-                      elevation: 5,
-                      child: Column(children: const [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Total Points',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          '50',
-                          style: TextStyle(fontSize: 30),
-                        )
-                      ]),
-                    ),
+                  const Divider(
+                    thickness: 1,
                   ),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Today\'s :',
+                                style: TextStyle(fontSize: 18),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
-            ],
+            ),
+          ),
+          Card(
+            child: Container(
+              height: 180,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        width: 74,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.43,
+                        child: const Text('Sold Items',
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: const Text('Score',
+                              style: TextStyle(fontSize: 18))),
+                    ],
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Monthly :',
+                                style: TextStyle(fontSize: 18),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Card(
+            child: Container(
+              height: 180,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        width: 74,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.43,
+                        child: const Text('Sold Items',
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: const Text('Score',
+                              style: TextStyle(fontSize: 18))),
+                    ],
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Yearly :',
+                                style: TextStyle(fontSize: 18),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ],
       ),

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:emanagementapp/constant.dart';
 import 'package:emanagementapp/home.dart';
 import 'package:emanagementapp/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       'password': pass.text,
     };
     var res = await http.post(
-      Uri.parse('http://192.168.0.99:8080/emanagementweb/api/user-login'),
+      Uri.parse('${dotenv.env["APP_URL"]}user-login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -50,10 +52,11 @@ class _LoginPageState extends State<LoginPage> {
         : false) {
       isLogged = true;
       Fluttertoast.showToast(
-          msg: '${loginres['message']}', backgroundColor: Colors.green);
+          msg: '${loginres['message']}', backgroundColor: iconColor);
 
       id.clear();
       pass.clear();
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -79,9 +82,9 @@ class _LoginPageState extends State<LoginPage> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                Color.fromARGB(255, 206, 233, 255),
-                Color.fromARGB(255, 128, 162, 255),
-                Color.fromARGB(255, 19, 73, 253),
+                Color.fromARGB(255, 173, 218, 255),
+                Color.fromRGBO(10, 88, 255, 1),
+                // Color.fromARGB(255, 253, 74, 19),
               ])),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
