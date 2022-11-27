@@ -7,7 +7,6 @@ import '../controller/controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -24,24 +23,21 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 228, 228, 228),
+      backgroundColor: Color.fromARGB(255, 216, 198, 221),
       appBar: AppBar(
         title: const Text(
-          "I-MAN",
+          "MANGALDEEP CLOTHES LLP",
           style: TextStyle(
-              color: Color(0xff562B08),
-              letterSpacing: 3,
+              color: Color.fromARGB(255, 224, 134, 233),
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
-      body: selectedIndex == 2
-          ? displayScreens[2]
-          : displayScreens[selectedIndex!],
+      body: displayScreens[selectedIndex],
       bottomNavigationBar: FloatingNavbar(
-        selectedBackgroundColor: Color.fromARGB(255, 255, 255, 255),
-        selectedItemColor: Color(0xff562B08),
-        unselectedItemColor: Color(0xff562B08),
+        selectedBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: const Color(0xff562B08),
+        unselectedItemColor: const Color(0xff562B08),
         // elevation: 2,
         currentIndex: selectedIndex,
         onTap: _onItemTapped,
@@ -53,6 +49,7 @@ class _HomePageState extends State<HomePage> {
         items: [
           FloatingNavbarItem(icon: Icons.home, title: 'Home'),
           FloatingNavbarItem(icon: Icons.explore, title: 'Stocks'),
+          FloatingNavbarItem(icon: Icons.analytics_outlined, title: 'Report'),
           FloatingNavbarItem(icon: Icons.group, title: '  HR  '),
         ],
       ),

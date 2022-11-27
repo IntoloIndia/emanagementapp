@@ -1,5 +1,6 @@
 import 'package:emanagementapp/view/Leaves.dart';
 import 'package:emanagementapp/view/home.dart';
+import 'package:emanagementapp/view/report.dart';
 import 'package:flutter/material.dart';
 
 import 'view/stocksmanage.dart';
@@ -12,5 +13,6 @@ Color themeColor = Color(0xffF5EFE6);
 List displayScreens = [
   Home(),
   Stocks(),
-  Leaves(),
+  const Reports(),
+  const Leaves(),
 ];

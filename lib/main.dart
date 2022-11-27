@@ -2,14 +2,21 @@ import 'package:emanagementapp/constant.dart';
 import 'package:emanagementapp/controller/controller.dart';
 import 'package:emanagementapp/view/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (_) => Controller(),
+void main() async {
+  await dotenv.load(fileName: ".env");
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => Controller(),
+        ),
+      ],
+      child: const MyApp(),
     ),
-  ], child: const MyApp()));
+  );
 }
 
 class MyApp extends StatelessWidget {

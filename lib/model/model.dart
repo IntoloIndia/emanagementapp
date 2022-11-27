@@ -10,13 +10,13 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   UserModel({
-    required  this.status,
-    required  this.data,
-    required  this.userCount,
+    this.status,
+    this.data,
+    this.userCount,
   });
-  int status;
-  List<Datum> data;
-  int userCount;
+  int? status;
+  List<Datum>? data;
+  int? userCount;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         status: json["status"],
@@ -26,27 +26,27 @@ class UserModel {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
         "user_count": userCount,
       };
 }
 
 class Datum {
   Datum({
-    required this.id,
-    required this.roleId,
-    required this.name,
-    required this.email,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.roleId,
+    this.name,
+    this.email,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  int id;
-  String roleId;
-  String name;
-  String email;
-  DateTime createdAt;
-  DateTime updatedAt;
+  int? id;
+  String? roleId;
+  String? name;
+  String? email;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
@@ -62,7 +62,7 @@ class Datum {
         "role_id": roleId,
         "name": name,
         "email": email,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
       };
 }
