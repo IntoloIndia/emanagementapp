@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:emanagementapp/constant.dart';
 import 'package:emanagementapp/view/Leaves.dart';
 import 'package:emanagementapp/view/stocksmanage.dart';

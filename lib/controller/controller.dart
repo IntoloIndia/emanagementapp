@@ -59,5 +59,4 @@ class Controller with ChangeNotifier {
     selectedIndex = index;
     notifyListeners();
   }
-
 }
