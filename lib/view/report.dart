@@ -1,3 +1,4 @@
+import 'package:emanagementapp/view/todayreport.dart';
 import 'package:flutter/material.dart';
 
 class Reports extends StatefulWidget {
@@ -17,14 +18,42 @@ class _ReportsState extends State<Reports> {
       margin: EdgeInsets.all(8),
       child: Column(
         children: [
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TodayReport()));
+            },
+            child: Card(
+              child: Container(
+                height: height * 0.1,
+                width: width,
+                child: Center(
+                    child: Text(
+                  "Today Report",
+                  style: TextStyle(fontSize: height * 0.03),
+                )),
+              ),
+            ),
+          ),
           Card(
             child: Container(
-              height: height * 0.15,
+              height: height * 0.1,
               width: width,
               child: Center(
                   child: Text(
-                "Today Sales",
-                style: TextStyle(fontSize: height * 0.045),
+                "Monthly Report",
+                style: TextStyle(fontSize: height * 0.03),
+              )),
+            ),
+          ),
+          Card(
+            child: Container(
+              height: height * 0.1,
+              width: width,
+              child: Center(
+                  child: Text(
+                "Custom Report",
+                style: TextStyle(fontSize: height * 0.03),
               )),
             ),
           )
