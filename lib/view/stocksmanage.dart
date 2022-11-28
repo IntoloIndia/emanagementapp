@@ -17,7 +17,7 @@ class _StocksState extends State<Stocks> {
     Provider.of<Controller>(context, listen: false).getSubCategory();
     super.initState();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
