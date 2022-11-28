@@ -22,12 +22,12 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 230, 230, 230),
+      backgroundColor: bgColor,
       appBar: AppBar(
-        leading: Text(
-          'i',
-          style: TextStyle(fontSize: 18),
-        ),
+        // leading: Text(
+        //   'i',
+        //   style: TextStyle(fontSize: 18, ),
+        // ),
         toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         elevation: 5,
         backgroundColor: themeColor,
@@ -36,11 +36,12 @@ class _NavBarState extends State<NavBar> {
           children: [
             Text(
               'i - man',
-              style: TextStyle(fontSize: 18, color: iconColor),
+              style: TextStyle(fontSize: 18, color: appBarTextColor),
             ),
             Text(
               'MANGALDEEP CLOTHES LLP',
-              style: TextStyle(fontWeight: FontWeight.w500, color: iconColor),
+              style: TextStyle(
+                  fontWeight: FontWeight.w500, color: appBarTextColor),
             ),
           ],
         ),

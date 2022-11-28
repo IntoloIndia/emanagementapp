@@ -22,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController id = TextEditingController();
   TextEditingController pass = TextEditingController();
   bool isTap = true;
-
   @override
   void initState() {
     super.initState();
@@ -73,95 +72,137 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height * 1,
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                Color.fromARGB(255, 173, 218, 255),
-                Color.fromRGBO(10, 88, 255, 1),
-                // Color.fromARGB(255, 253, 74, 19),
-              ])),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Card(
-                elevation: 10,
-                child: SizedBox(
-                    height: 150, child: Image.asset('assets/img/log.png')),
-              ),
-              Column(
-                children: [
-                  Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 25),
-                    elevation: 10,
-                    child: TextField(
-                      controller: id,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.person),
-                          label: Text('Employee Id'),
-                          hintText: 'Email@com'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 25),
-                    elevation: 10,
-                    child: TextField(
-                      controller: pass,
-                      obscureText: isTap,
-                      decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isTap = false;
-                              });
-                            },
-                            icon: const Icon(Icons.remove_red_eye),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   backgroundColor: bgColor,
+        //   toolbarHeight: 5,
+
+        // ),
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height * 1,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                  bgColor,
+                  bgColor
+                  // Color.fromARGB(255, 253, 74, 19),
+                ])),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  elevation: 10,
+                  child: SizedBox(
+                      height: 150, child: Image.asset('assets/img/log.png')),
+                ),
+                Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.5),
+                          borderRadius: BorderRadius.circular(35)),
+                      margin: EdgeInsets.symmetric(horizontal: 80),
+                      padding: EdgeInsets.all(5),
+                      child: TabBar(
+                        // controller: _tabController,
+                        // give the indicator a decoration (color and border radius)
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            25.0,
                           ),
-                          border: InputBorder.none,
-                          prefixIcon: const Icon(Icons.password),
-                          label: const Text('Password'),
-                          hintText: 'Password'),
+                          color: appBarTextColor,
+                        ),
+                        labelColor: Colors.white,
+                        unselectedLabelColor: Colors.black,
+                        tabs: const [
+                          Tab(
+                            text: 'Employee\nlogin',
+                          ),
+                          Tab(
+                            text: 'Admin\nlogin',
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Card(
-                    elevation: 10,
-                    child: SizedBox(
-                        height: 50,
-                        width: 150,
-                        child: TextButton(
-                            onPressed: () async {
-                              id.text;
-                              pass.text;
-                              login(id.text, pass.text);
-                            },
-                            child: const Text("Login"))),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                children: const [
-                  Text(
-                    "Powered By Intenics India",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              )
-            ],
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      elevation: 10,
+                      child: TextField(
+                        controller: id,
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.person),
+                            label: Text('Employee Id'),
+                            hintText: 'Email@com'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      elevation: 10,
+                      child: TextField(
+                        controller: pass,
+                        obscureText: isTap,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isTap = false;
+                                });
+                              },
+                              icon: const Icon(Icons.remove_red_eye),
+                            ),
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.password),
+                            label: const Text('Password'),
+                            hintText: 'Password'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Card(
+                      elevation: 10,
+                      child: SizedBox(
+                          height: 50,
+                          width: 150,
+                          child: TextButton(
+                              onPressed: () async {
+                                id.text;
+                                pass.text;
+                                login(id.text, pass.text);
+                              },
+                              child: const Text("Login"))),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: const [
+                    Text(
+                      "Powered By Intenics India",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

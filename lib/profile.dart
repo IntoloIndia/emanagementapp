@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:emanagementapp/login.dart';
+// import 'package:emanagementapp/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -64,19 +64,19 @@ class _PorfileState extends State<Porfile> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 3),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
                   decoration: BoxDecoration(border: Border.all()),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(width: 0.5))),
                                   // width: MediaQuery.of(context).size.width,
@@ -92,7 +92,7 @@ class _PorfileState extends State<Porfile> {
                                     ),
                                   )),
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     border:
                                         Border(bottom: BorderSide(width: 0.5))),
                                 // width: MediaQuery.of(context).size.width,
@@ -106,7 +106,7 @@ class _PorfileState extends State<Porfile> {
                                 ),
                               ),
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     border:
                                         Border(bottom: BorderSide(width: 0.5))),
                                 // width: MediaQuery.of(context).size.width,
@@ -145,6 +145,7 @@ class _PorfileState extends State<Porfile> {
                     ),
                   ),
                 ),
+                const SizedBox()
                 // Padding(
                 //   padding: const EdgeInsets.all(15.0),
                 //   child: Container(
