@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constant.dart';
 import '../controller/controller.dart';
+import '../login.dart';
 
 class Leaves extends StatefulWidget {
   const Leaves({super.key});
@@ -320,7 +322,7 @@ class _LeavesState extends State<Leaves> {
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 10),
                                     padding: EdgeInsets.all(10),
-                                    child: Text(
+                                    child: const Text(
                                       "Name",
                                     ),
                                   ),
@@ -357,9 +359,9 @@ class _LeavesState extends State<Leaves> {
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(2)),
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      padding: EdgeInsets.all(10),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      padding: const EdgeInsets.all(10),
                                       child: Text(
                                         "${i + 1}  ${userCount.userData.data![i].name}",
                                       ),
@@ -418,6 +420,39 @@ class _LeavesState extends State<Leaves> {
                     ),
                   ],
                 )),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              height: 40,
+              width: 80,
+              decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextButton(
+                onPressed: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  preferences.remove('login_id');
+                  preferences.remove('admin_login_id');
+
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ));
+                },
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

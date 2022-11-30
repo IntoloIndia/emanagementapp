@@ -1,3 +1,4 @@
+import 'package:emanagementapp/constant.dart';
 import 'package:emanagementapp/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class _StocksState extends State<Stocks> {
     Provider.of<Controller>(context, listen: false).getSubCategory();
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -28,6 +29,7 @@ class _StocksState extends State<Stocks> {
         Provider.of<Controller>(context, listen: true).subCategory;
     final availableCategory =
         Provider.of<Controller>(context, listen: true).category;
+
     return Container(
       child: Column(
         children: [
@@ -106,8 +108,37 @@ class _StocksState extends State<Stocks> {
               ],
             ),
           ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Price",
+                      style: TextStyle(color: iconColor),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.05,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Category",
+                      style: TextStyle(color: iconColor),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
   }
 }
+

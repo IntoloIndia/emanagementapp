@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:emanagementapp/constant.dart';
-import 'package:emanagementapp/home.dart';
 import 'package:emanagementapp/navbar.dart';
+import 'package:emanagementapp/view/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,13 +27,13 @@ class _LoginPageState extends State<LoginPage> {
     // login(id.text, pass.text);
   }
 
-  Future<dynamic> login(user, pswd) async {
+  Future<dynamic> teamLogin(user, pswd, endPonit, team) async {
     Map Data = {
       'email': id.text,
       'password': pass.text,
     };
     var res = await http.post(
-      Uri.parse('${dotenv.env["APP_URL"]}user-login'),
+      Uri.parse('${dotenv.env["APP_URL"]}$endPonit'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -55,15 +54,33 @@ class _LoginPageState extends State<LoginPage> {
 
       id.clear();
       pass.clear();
+
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
+
+      if (team == false) {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const NavBar(),
-          ));
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+        );
+      }
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setInt('login_id', loginres['login_id']);
-      preferences.setString('name', loginres['login_name']);
+
+      if (team) {
+        preferences.setInt('admin_login_id', loginres['login_id']);
+        preferences.setString('admin_name', loginres['login_name']);
+      } else {
+        preferences.setInt('login_id', loginres['login_id']);
+        preferences.setString('name', loginres['login_name']);
+      }
     } else {
       Fluttertoast.showToast(
           msg: '${loginres['message']}', backgroundColor: Colors.redAccent);
@@ -72,6 +89,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -82,57 +101,47 @@ class _LoginPageState extends State<LoginPage> {
 
         // ),
         body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 1,
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                  bgColor,
-                  bgColor
-                  // Color.fromARGB(255, 253, 74, 19),
-                ])),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Card(
-                  elevation: 10,
-                  child: SizedBox(
-                      height: 150, child: Image.asset('assets/img/log.png')),
+          child: SafeArea(
+            child: Container(
+              child: Column(children: [
+                SizedBox(
+                  height: height * 0.35,
                 ),
+                Align(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Team Login",
+                        style: TextStyle(
+                          fontWeight: admLogin == false
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                      Switch(
+                          value: admLogin,
+                          onChanged: (value) {
+                            setState(() {
+                              admLogin = value;
+                            });
+                          }),
+                      Text(
+                        "Admin Login",
+                        style: TextStyle(
+                          fontWeight: admLogin == true
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // SizedBox(
+                //   height: height * 0.35,
+                // ),
                 Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 0.5),
-                          borderRadius: BorderRadius.circular(35)),
-                      margin: EdgeInsets.symmetric(horizontal: 80),
-                      padding: EdgeInsets.all(5),
-                      child: TabBar(
-                        // controller: _tabController,
-                        // give the indicator a decoration (color and border radius)
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            25.0,
-                          ),
-                          color: appBarTextColor,
-                        ),
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Colors.black,
-                        tabs: const [
-                          Tab(
-                            text: 'Employee\nlogin',
-                          ),
-                          Tab(
-                            text: 'Admin\nlogin',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                     Card(
                       margin: const EdgeInsets.symmetric(horizontal: 25),
                       elevation: 10,
@@ -158,7 +167,11 @@ class _LoginPageState extends State<LoginPage> {
                             suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
-                                  isTap = false;
+                                  if (isTap == false) {
+                                    isTap = true;
+                                  } else {
+                                    isTap = false;
+                                  }
                                 });
                               },
                               icon: const Icon(Icons.remove_red_eye),
@@ -181,27 +194,33 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: () async {
                                 id.text;
                                 pass.text;
-                                login(id.text, pass.text);
+                                if (admLogin == true) {
+                                  teamLogin(id.text, pass.text, "admin-login",
+                                      admLogin);
+                                } else {
+                                  teamLogin(id.text, pass.text, "user-login",
+                                      admLogin);
+                                }
                               },
                               child: const Text("Login"))),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  children: const [
-                    Text(
-                      "Powered By Intenics India",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    const SizedBox(
+                      height: 20,
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      children: const [
+                        Text(
+                          "Powered By Intenics India",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ]),
             ),
           ),
         ),
