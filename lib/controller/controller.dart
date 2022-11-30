@@ -13,8 +13,8 @@ class Controller with ChangeNotifier {
   SubCategory subCategory = SubCategory();
 
   Future<void> getUserData() async {
-    print('${dotenv.env["API"]}users');
-    final response = await http.get(Uri.parse('${dotenv.env["API"]}users'));
+    print('${dotenv.env["APP_URL"]}users');
+    final response = await http.get(Uri.parse('${dotenv.env["APP_URL"]}users'));
 
     if (response.statusCode == 200) {
       userData = userModelFromJson(response.body);
@@ -25,9 +25,9 @@ class Controller with ChangeNotifier {
   }
 
   Future<void> availableStocksData() async {
-    print('${dotenv.env["API"]}get-product');
+    print('${dotenv.env["APP_URL"]}get-product');
     final response =
-        await http.get(Uri.parse('${dotenv.env["API"]}get-product'));
+        await http.get(Uri.parse('${dotenv.env["APP_URL"]}get-product'));
 
     if (response.statusCode == 200) {
       availableStocks = availableStocksFromJson(response.body);
@@ -36,9 +36,9 @@ class Controller with ChangeNotifier {
   }
 
   Future<void> getCategoryData() async {
-    print('${dotenv.env["API"]}get-category');
+    print('${dotenv.env["APP_URL"]}get-category');
     final response =
-        await http.get(Uri.parse('${dotenv.env["API"]}get-category'));
+        await http.get(Uri.parse('${dotenv.env["APP_URL"]}get-category'));
     if (response.statusCode == 200) {
       category = categoryFromJson(response.body);
       notifyListeners();
@@ -46,9 +46,9 @@ class Controller with ChangeNotifier {
   }
 
   Future<void> getSubCategory() async {
-    print('${dotenv.env["API"]}get-sub-category/2');
+    print('${dotenv.env["APP_URL"]}get-sub-category/2');
     final response =
-        await http.get(Uri.parse('${dotenv.env["API"]}get-sub-category/2'));
+        await http.get(Uri.parse('${dotenv.env["APP_URL"]}get-sub-category/2'));
     if (response.statusCode == 200) {
       subCategory = subCategoryFromJson(response.body);
       notifyListeners();

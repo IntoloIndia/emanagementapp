@@ -1,3 +1,5 @@
+import 'package:emanagementapp/view/Custom_report.dart';
+import 'package:emanagementapp/view/monthly_report.dart';
 import 'package:emanagementapp/view/todayreport.dart';
 import 'package:flutter/material.dart';
 
@@ -35,26 +37,38 @@ class _ReportsState extends State<Reports> {
               ),
             ),
           ),
-          Card(
-            child: Container(
-              height: height * 0.1,
-              width: width,
-              child: Center(
-                  child: Text(
-                "Monthly Report",
-                style: TextStyle(fontSize: height * 0.03),
-              )),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MonthlyReport()));
+            },
+            child: Card(
+              child: Container(
+                height: height * 0.1,
+                width: width,
+                child: Center(
+                    child: Text(
+                  "Monthly Report",
+                  style: TextStyle(fontSize: height * 0.03),
+                )),
+              ),
             ),
           ),
-          Card(
-            child: Container(
-              height: height * 0.1,
-              width: width,
-              child: Center(
-                  child: Text(
-                "Custom Report",
-                style: TextStyle(fontSize: height * 0.03),
-              )),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CustomReport()));
+            },
+            child: Card(
+              child: Container(
+                height: height * 0.1,
+                width: width,
+                child: Center(
+                    child: Text(
+                  "Custom Report",
+                  style: TextStyle(fontSize: height * 0.03),
+                )),
+              ),
             ),
           )
         ],

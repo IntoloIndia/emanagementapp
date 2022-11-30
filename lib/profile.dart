@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 // import 'package:emanagementapp/login.dart';
+import 'package:emanagementapp/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -145,36 +146,39 @@ class _PorfileState extends State<Porfile> {
                     ),
                   ),
                 ),
-                const SizedBox()
-                // Padding(
-                //   padding: const EdgeInsets.all(15.0),
-                //   child: Container(
-                //     height: 40,
-                //     width: 80,
-                //     decoration: BoxDecoration(
-                //         color: Colors.redAccent,
-                //         borderRadius: BorderRadius.circular(10)),
-                //     child: TextButton(
-                //         onPressed: () async {
-                //           SharedPreferences preferences =
-                //               await SharedPreferences.getInstance();
-                //           preferences.remove('login_id');
-                //           Navigator.pushReplacement(
-                //               context,
-                //               MaterialPageRoute(
-                //                 builder: (context) => const LoginPage(),
-                //               ));
-                //         },
-                //         child: const Text(
-                //           'Logout',
-                //           style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 16,
-                //               fontWeight: FontWeight.w700,
-                //               letterSpacing: 1),
-                //         )),
-                //   ),
-                // )
+                const SizedBox(),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    height: 40,
+                    width: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TextButton(
+                      onPressed: () async {
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                        preferences.remove('login_id');
+                        preferences.remove('admin_login_id');
+                        
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ));
+                      },
+                      child: const Text(
+                        'Logout',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           );

@@ -16,6 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   var logged = preferences.getInt('login_id');
+  var admLogin = preferences.getInt('admin_login_id');
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
@@ -24,8 +25,18 @@ void main() async {
     ],
     child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: logged == null ? LoginPage() : NavBar()),
+        theme: ThemeData(
+            appBarTheme: AppBarTheme(
+          color: themeColor,
+        )),
+        home: logged == 7
+            ? NavBar()
+            : admLogin == 1
+                ? HomePage()
+                : LoginPage()),
   ));
+  print(admLogin);
+  print(logged);
 }
 
 // class MyApp extends StatelessWidget {
