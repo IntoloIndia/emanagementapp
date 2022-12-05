@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'constant.dart';
+import 'login.dart';
 
 class Cal extends StatefulWidget {
   const Cal({super.key});
@@ -256,6 +258,28 @@ class _CalState extends State<Cal> {
             ),
             Card(
               child: Container(height: 350, child: calendar),
+            ),
+            TextButton(
+              onPressed: () async {
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+                preferences.remove('login_id');
+                preferences.remove('admin_login_id');
+
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ));
+              },
+              child: const Text(
+                'Logout',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1),
+              ),
             ),
           ],
         ),
