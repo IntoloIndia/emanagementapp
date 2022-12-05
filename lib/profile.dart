@@ -161,7 +161,7 @@ class _PorfileState extends State<Porfile> {
                             await SharedPreferences.getInstance();
                         preferences.remove('login_id');
                         preferences.remove('admin_login_id');
-                        
+
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
