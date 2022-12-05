@@ -105,7 +105,17 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               child: Column(children: [
                 SizedBox(
-                  height: height * 0.35,
+                  height: height * 0.15,
+                ),
+                Text(
+                  "MangalDeep Clothes",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: appBarTextColor),
+                ),
+                SizedBox(
+                  height: height * 0.15,
                 ),
                 Align(
                   child: Row(

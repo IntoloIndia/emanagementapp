@@ -1,5 +1,5 @@
 import 'package:emanagementapp/constant.dart';
-import 'package:emanagementapp/home.dart';
+import 'package:emanagementapp/view/team_home.dart';
 import 'package:emanagementapp/login.dart';
 import 'package:emanagementapp/profile.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';

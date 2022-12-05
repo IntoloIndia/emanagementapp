@@ -13,57 +13,53 @@ String availableStocksToJson(AvailableStocks data) =>
 class AvailableStocks {
   AvailableStocks({
     this.data,
+    this.count,
   });
 
   List<Datum>? data;
+  int? count;
 
   factory AvailableStocks.fromJson(Map<String, dynamic> json) =>
       AvailableStocks(
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        count: json["count"],
       );
 
   Map<String, dynamic> toJson() => {
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "count": count,
       };
 }
 
 class Datum {
   Datum({
-    this.id,
-    this.productCode,
-    this.categoryId,
-    this.subCategoryId,
-    this.product,
-    this.price,
-    this.size,
-    this.color,
-    this.barcode,
-    this.category,
-    this.subCategory,
-  });
+     this.id,
+        this.productCode,
+        this.product,
+        this.salesPrice,
+        this.size,
+        this.color,
+        this.category,
+        this.subCategory,
+  }
+);
 
-  int? id;
-  String? productCode;
-  String? categoryId;
-  String? subCategoryId;
-  String? product;
-  String? price;
-  String? size;
-  String? color;
-  String? barcode;
-  String? category;
-  String? subCategory;
+    int? id;
+    String? productCode;
+    String? product;
+    String? salesPrice;
+    String? size;
+    String? color;
+    String? category;
+    String? subCategory;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
+       id: json["id"],
         productCode: json["product_code"],
-        categoryId: json["category_id"],
-        subCategoryId: json["sub_category_id"],
         product: json["product"],
-        price: json["price"],
+        salesPrice: json["sales_price"],
         size: json["size"],
         color: json["color"],
-        barcode: json["barcode"] == null ? null : json["barcode"],
         category: json["category"],
         subCategory: json["sub_category"],
       );
@@ -71,13 +67,10 @@ class Datum {
   Map<String, dynamic> toJson() => {
         "id": id,
         "product_code": productCode,
-        "category_id": categoryId,
-        "sub_category_id": subCategoryId,
         "product": product,
-        "price": price,
+        "sales_price": salesPrice,
         "size": size,
         "color": color,
-        "barcode": barcode == null ? null : barcode,
         "category": category,
         "sub_category": subCategory,
       };

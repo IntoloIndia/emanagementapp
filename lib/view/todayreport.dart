@@ -10,7 +10,8 @@ final TableRow rowSpacer = const TableRow(children: [
   SizedBox(
     height: 15,
   ),
-]);
+ ]
+);
 
 class TodayReport extends StatelessWidget {
   TodayReport({super.key});

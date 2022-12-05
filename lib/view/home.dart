@@ -1,7 +1,7 @@
-import 'package:emanagementapp/constant.dart';
-import 'package:emanagementapp/view/Leaves.dart';
 import 'package:emanagementapp/view/stocksmanage.dart';
+import 'package:emanagementapp/view/Leaves.dart';
 import 'package:flutter/foundation.dart';
+import 'package:emanagementapp/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,11 +15,20 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List items1 = [];
 
+  List<String>? ab;
+  var cont;
+
   @override
   void initState() {
-    Provider.of<Controller>(context, listen: false).availableStocksData();
+    cont = Provider.of<Controller>(context, listen: false);
+    Provider.of<Controller>(context, listen: false)
+        .availableStocksData(cont.cateEndPoint);
     Provider.of<Controller>(context, listen: false).getCategoryData();
     Provider.of<Controller>(context, listen: false).getSubCategory();
+    Provider.of<Controller>(context, listen: false).getTodaySales();
+    Provider.of<Controller>(context, listen: false).getColorCategory();
+    Provider.of<Controller>(context, listen: false).getSizeCategory();
+
     // TODO: implement initState
     super.initState();
   }
@@ -41,6 +50,14 @@ class _HomeState extends State<Home> {
         Provider.of<Controller>(context, listen: true).subCategory;
     final availableCategory =
         Provider.of<Controller>(context, listen: true).category;
+    final todaySales =
+        Provider.of<Controller>(context, listen: true).todaySales;
+    final colorCategory =
+        Provider.of<Controller>(context, listen: true).colorModel;
+    final sizeCategory =
+        Provider.of<Controller>(context, listen: true).sizeModel;
+
+    // print(todaySales.data![0].productCode);
 
     var containerHeight;
 
@@ -53,6 +70,7 @@ class _HomeState extends State<Home> {
         containerHeight = height * 0.25;
       }
     }
+
     var tSalesAnimatedheight;
     var tSalesAnimatedwidth;
 
@@ -234,8 +252,10 @@ class _HomeState extends State<Home> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: height * 0.015,
                                         horizontal: width * 0.04),
-                                    child: const Text(
-                                      "999999 \u{20B9}",
+                                    child: Text(
+                                      todaySales.data == null
+                                          ? "${0}\u{20B9}"
+                                          : "${todaySales.data!.length}\u{20B9}",
                                       style: TextStyle(
                                           // color: Colors.white,
                                           // fontWeight: FontWeight.w600
@@ -272,13 +292,33 @@ class _HomeState extends State<Home> {
                                       "Shirt",
                                       "Shirt",
                                     ];
+
+                                    List<String> otherIt4 = [];
+                                    for (int i = 0;
+                                        i < colorCategory.data!.length;
+                                        i++) {
+                                      otherIt4.add(colorCategory.data![i].color
+                                          .toString());
+                                    }
+
+                                    List<String> otherIt5 = [];
+                                    for (int i = 0;
+                                        i < sizeCategory.data!.length;
+                                        i++) {
+                                      otherIt5.add(sizeCategory.data![i].size
+                                          .toString());
+                                    }
+
                                     final List<String> ab = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Fiters(
-                                            category: otherIt,
-                                            subCategory: otherIt2,
-                                            team: otherIt3);
+                                          category: otherIt,
+                                          subCategory: otherIt2,
+                                          team: otherIt3,
+                                          color: otherIt4,
+                                          size: otherIt5,
+                                        );
                                       },
                                     );
                                     setState(
@@ -298,199 +338,159 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     if (isToday == true) ...[
-                      AnimatedContainer(
-                        curve: Curves.fastOutSlowIn,
-                        duration: const Duration(seconds: 5),
-                        // color: Colors.black54,
-                        height: tSalesAnimatedheight,
-                        width: tSalesAnimatedwidth,
-                        child: Column(
-                          children: [
-                            Divider(
-                              thickness: 2,
-                            ),
-                            Card(
-                              child: ClipPath(
-                                clipper: ShapeBorderClipper(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(3))),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      left: BorderSide(
-                                          color: iconColor, width: 5),
-                                    ),
-                                  ),
-                                  child: Container(
-                                    margin: EdgeInsets.all(5),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                      if (todaySales.data == null) ...{
+                        const CircularProgressIndicator()
+                      } else ...{
+                        for (int i = 0; i < todaySales.data!.length; i++)
+                          AnimatedContainer(
+                            curve: Curves.fastOutSlowIn,
+                            duration: const Duration(seconds: 5),
+                            // color: Colors.black54,
+                            height: tSalesAnimatedheight,
+                            width: tSalesAnimatedwidth,
+                            child: Column(
+                              children: [
+                                const Divider(
+                                  thickness: 2,
+                                ),
+                                Card(
+                                  child: ClipPath(
+                                    clipper: ShapeBorderClipper(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3))),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          left: BorderSide(
+                                              color: iconColor, width: 5),
+                                        ),
+                                      ),
+                                      child: Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
                                           children: [
-                                            Text("1. T-shirt"),
-                                            Container(
-                                              child: Row(
-                                                children: [
-                                                  const CircleAvatar(
-                                                    minRadius: 15,
-                                                    backgroundColor:
-                                                        Colors.blueAccent,
-                                                    child: Text(""),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  const CircleAvatar(
-                                                    minRadius: 15,
-                                                    backgroundColor:
-                                                        Colors.black87,
-                                                    child: Text(
-                                                      "XL",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      top: 3,
-                                                      left: 5,
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 8),
-                                                    child: const Text(
-                                                      "2",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                    "${i + 1} ${todaySales.data![i].product}"),
+                                                Container(
+                                                  child: Row(
+                                                    children: [
+                                                      const CircleAvatar(
+                                                        minRadius: 15,
+                                                        backgroundColor:
+                                                            Colors.blueAccent,
+                                                        child: Text(""),
                                                       ),
-                                                    ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      const CircleAvatar(
+                                                        minRadius: 15,
+                                                        backgroundColor:
+                                                            Colors.black87,
+                                                        child: Text(
+                                                          "XL",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      // Container(
+                                                      //   decoration:
+                                                      //       BoxDecoration(
+                                                      //     color: Colors.black,
+                                                      //     borderRadius:
+                                                      //         BorderRadius
+                                                      //             .circular(10),
+                                                      //   ),
+                                                      //   margin: const EdgeInsets
+                                                      //       .only(
+                                                      //     top: 3,
+                                                      //     left: 5,
+                                                      //   ),
+                                                      //   padding:
+                                                      //       const EdgeInsets
+                                                      //               .symmetric(
+                                                      //           horizontal: 10,
+                                                      //           vertical: 8),
+                                                      //   child: const Text(
+                                                      //     "2",
+                                                      //     style: TextStyle(
+                                                      //       color: Colors.white,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.black,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        margin: const EdgeInsets
+                                                            .only(top: 3),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 8),
+                                                        child: const Text(
+                                                          "S1",
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text("Price :  600"),
+                                                Container(
+                                                  child: Row(
+                                                    children: [
+                                                      Text("11/19/2022"),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text("12.00 pm "),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
                                             )
                                           ],
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Price :  600"),
-                                            Container(
-                                              child: Row(
-                                                children: [
-                                                  const Text("11/19/2022"),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  const Text("12.00 pm "),
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            top: 3),
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 8),
-                                                    child: const Text(
-                                                      "S1",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
+                          )
+                      }
                     ]
-                    // Card(
-                    //   shape: RoundedRectangleBorder(
-                    //     side: const BorderSide(
-                    //       color: Colors.black12,
-                    //     ),
-                    //     borderRadius:
-                    //         BorderRadius.circular(20.0), //<-- SEE HERE
-                    //   ),
-                    //   child: Container(
-                    //     margin: EdgeInsets.all(10),
-                    //     child: Column(
-                    //       children: [
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Text("1. T-shirt"),
-                    //             CircleAvatar(
-                    //               minRadius: 15,
-                    //               backgroundColor: Colors.black87,
-                    //               child: Text(
-                    //                 "Xl",
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             ),
-                    //             CircleAvatar(
-                    //               minRadius: 15,
-                    //               backgroundColor: Colors.blueAccent,
-                    //               child: Text(""),
-                    //             )
-                    //           ],
-                    //         ),
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Text("Price :  600"),
-                    //             Container(
-                    //               decoration: BoxDecoration(
-                    //                 color: Colors.black54,
-                    //                 borderRadius: BorderRadius.circular(10),
-                    //               ),
-                    //               margin: EdgeInsets.only(top: 3),
-                    //               padding: EdgeInsets.all(10),
-                    //               child: Text(
-                    //                 "S1",
-                    //                 style: TextStyle(
-                    //                   color: Colors.white,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -595,13 +595,32 @@ class _HomeState extends State<Home> {
                                       "Shirt",
                                       "Shirt",
                                     ];
+                                    List<String> otherIt4 = [];
+                                    for (int i = 0;
+                                        i < colorCategory.data!.length;
+                                        i++) {
+                                      otherIt4.add(colorCategory.data![i].color
+                                          .toString());
+                                    }
+
+                                    List<String> otherIt5 = [];
+                                    for (int i = 0;
+                                        i < sizeCategory.data!.length;
+                                        i++) {
+                                      otherIt5.add(sizeCategory.data![i].size
+                                          .toString());
+                                    }
+
                                     final List<String> ab = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Fiters(
-                                            category: otherIt,
-                                            subCategory: otherIt2,
-                                            team: otherIt3);
+                                          category: otherIt,
+                                          subCategory: otherIt2,
+                                          team: otherIt3,
+                                          color: otherIt4,
+                                          size: otherIt5,
+                                        );
                                       },
                                     );
                                     setState(
@@ -922,12 +941,11 @@ class _HomeState extends State<Home> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: height * 0.015,
                                         horizontal: width * 0.04),
-                                    child: const Text(
-                                      "100 ",
-                                      style: TextStyle(
-                                          // color: Colors.white,
-                                          // fontWeight: FontWeight.w600
-                                          ),
+                                    child: Text(
+                                      available.data == null
+                                          ? "${0}"
+                                          : "${available.data!.length}",
+                                      style: const TextStyle(),
                                     ),
                                   ),
                                 ),
@@ -960,13 +978,32 @@ class _HomeState extends State<Home> {
                                       "Shirt",
                                       "Shirt",
                                     ];
+                                    List<String> otherIt4 = [];
+                                    for (int i = 0;
+                                        i < colorCategory.data!.length;
+                                        i++) {
+                                      otherIt4.add(colorCategory.data![i].color
+                                          .toString());
+                                    }
+
+                                    List<String> otherIt5 = [];
+                                    for (int i = 0;
+                                        i < sizeCategory.data!.length;
+                                        i++) {
+                                      otherIt5.add(sizeCategory.data![i].size
+                                          .toString());
+                                    }
+
                                     final List<String> ab = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Fiters(
-                                            category: otherIt,
-                                            subCategory: otherIt2,
-                                            team: otherIt3);
+                                          category: otherIt,
+                                          subCategory: otherIt2,
+                                          team: otherIt3,
+                                          color: otherIt4,
+                                          size: otherIt5,
+                                        );
                                       },
                                     );
                                     setState(
@@ -989,118 +1026,82 @@ class _HomeState extends State<Home> {
                       if (available.data == null) ...[
                         CircularProgressIndicator(),
                       ] else ...[
-                        Container(
-                          height: containerHeight,
-                          width: width,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: available.data!.length,
-                            itemBuilder: (context, i) {
-                              // num col = 0xFF + cont.data![i].color as int;
-                              return Card(
-                                child: ClipPath(
-                                  clipper: ShapeBorderClipper(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3))),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        left: BorderSide(
-                                            color: iconColor, width: 5),
-                                      ),
-                                    ),
-                                    child: Container(
-                                      margin: const EdgeInsets.all(5),
-                                      child: Column(
+                        for (int i = 0; i < available.data!.length; i++) ...{
+                          Card(
+                            child: ClipPath(
+                              clipper: ShapeBorderClipper(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(3))),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    left:
+                                        BorderSide(color: iconColor, width: 5),
+                                  ),
+                                ),
+                                child: Container(
+                                  margin: const EdgeInsets.all(5),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                  "${i + 1}.${available.data![i].product}"),
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    CircleAvatar(
-                                                      minRadius: 15,
-                                                      backgroundColor: Color(
-                                                          int.parse("0xFF" +
-                                                              "${available.data![i].color.toString().substring(1, available.data![i].color.toString().length)}")),
-                                                      child: Text(""),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    CircleAvatar(
-                                                      minRadius: 15,
-                                                      backgroundColor:
-                                                          Colors.black87,
-                                                      child: Text(
-                                                        "${available.data![i].size}",
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    ),
-                                                  ],
+                                          Text(
+                                              "${i + 1}.${available.data![i].product}"),
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                CircleAvatar(
+                                                  minRadius: 15,
+                                                  backgroundColor: Color(available
+                                                              .data![i].color ==
+                                                          null
+                                                      ? 0xFFFFFFFF
+                                                      : int.parse("0xFF" +
+                                                          "${available.data![i].color.toString().substring(1, available.data![i].color.toString().length)}")),
+                                                  child: Text(""),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "Price : ${available.data![i].price}",
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text("QTY"),
-                                                  const SizedBox(
-                                                    width: 5,
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                CircleAvatar(
+                                                  minRadius: 15,
+                                                  backgroundColor:
+                                                      Colors.black87,
+                                                  child: Text(
+                                                    "${available.data![i].size}",
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
                                                   ),
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black87,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      top: 3,
-                                                      left: 5,
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 8),
-                                                    child: const Text(
-                                                      "2",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
+                                                ),
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),
-                                    ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Price : ${available.data![i].salesPrice}",
+                                          ),
+                                        ],
+                                      )
+                                    ],
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                            ),
                           ),
-                        ),
+                        }
                       ]
                     ]
                   ],
@@ -1109,88 +1110,6 @@ class _HomeState extends State<Home> {
             ),
           ),
 
-          // Card(
-          //   shape: RoundedRectangleBorder(
-          //     side: const BorderSide(
-          //       color: Colors.black12, //<-- SEE HERE
-          //     ),
-          //     borderRadius: BorderRadius.circular(6.0),
-          //   ),
-          //   margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          //   child: Container(
-          //     margin: const EdgeInsets.all(5),
-          //     child: Column(
-          //       children: [
-          //         // Divider(
-          //         //   thickness: 2,
-          //         // ),
-          //         Align(
-          //           alignment: Alignment.topLeft,
-          //           child: Container(
-          //             child: Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 const Text(
-          //                   "Available Stock",
-          //                   style: TextStyle(
-          //                     fontSize: 18,
-          //                     fontWeight: FontWeight.bold,
-          //                   ),
-          //                 ),
-          //                 GestureDetector(
-          //                     onTap: () async {
-          //                       List<String> otherIt = [];
-          //                       for (int i = 0;
-          //                           i < availableCategory.data!.length;
-          //                           i++) {
-          //                         otherIt.add(availableCategory
-          //                             .data![i].category
-          //                             .toString());
-          //                       }
-
-          //                       List<String> otherIt2 = [];
-          //                       for (int i = 0;
-          //                           i < availableSubCategory.data!.length;
-          //                           i++) {
-          //                         otherIt2.add(availableSubCategory
-          //                             .data![i].subCategory
-          //                             .toString());
-          //                       }
-
-          //                       final List<String> otherIt3 = [
-          //                         "Shirt",
-          //                         "Shirt",
-          //                         "Shirt",
-          //                         "Shirt",
-          //                       ];
-
-          //                       final List<String> ab = await showDialog(
-          //                         context: context,
-          //                         builder: (BuildContext context) {
-          //                           return Fiters(
-          //                               category: otherIt,
-          //                               subCategory: otherIt2,
-          //                               team: otherIt3);
-          //                         },
-          //                       );
-          //                       setState(() {
-          //                         items1 = ab;
-          //                         print("guestDFac");
-          //                         print(ab);
-          //                       });
-          //                     },
-          //                     child: Icon(Icons.format_list_bulleted))
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //         const Divider(
-          //           thickness: 2,
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           GestureDetector(
             onTap: () {
               setState(() {
@@ -1286,13 +1205,32 @@ class _HomeState extends State<Home> {
                                       "Shirt",
                                       "Shirt",
                                     ];
+                                    List<String> otherIt4 = [];
+                                    for (int i = 0;
+                                        i < colorCategory.data!.length;
+                                        i++) {
+                                      otherIt4.add(colorCategory.data![i].color
+                                          .toString());
+                                    }
+
+                                    List<String> otherIt5 = [];
+                                    for (int i = 0;
+                                        i < sizeCategory.data!.length;
+                                        i++) {
+                                      otherIt5.add(sizeCategory.data![i].size
+                                          .toString());
+                                    }
+
                                     final List<String> ab = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Fiters(
-                                            category: otherIt,
-                                            subCategory: otherIt2,
-                                            team: otherIt3);
+                                          category: otherIt,
+                                          subCategory: otherIt2,
+                                          team: otherIt3,
+                                          color: otherIt4,
+                                          size: otherIt5,
+                                        );
                                       },
                                     );
                                     setState(
@@ -1434,278 +1372,10 @@ class _HomeState extends State<Home> {
                       ),
                     )
                   ],
-                  // const SizedBox(
-                  //   height: 300,
-                  // )
                 ]),
               ),
             ),
           )
-          // Material(
-          //   elevation: 5,
-          //   child: Container(
-          //       margin: EdgeInsets.all(10),
-          //       width: width,
-          //       height: height * 0.4,
-          //       child: CarouselSlider(
-          //         options: CarouselOptions(
-          //           height: 400,
-          //           aspectRatio: 16 / 9,
-          //           viewportFraction: 0.8,
-          //           initialPage: 0,
-          //           enableInfiniteScroll: true,
-          //           reverse: false,
-          //           autoPlay: true,
-          //           autoPlayInterval: Duration(seconds: 2),
-          //           autoPlayAnimationDuration: Duration(milliseconds: 800),
-          //           autoPlayCurve: Curves.fastOutSlowIn,
-          //           enlargeCenterPage: true,
-          //           scrollDirection: Axis.horizontal,
-          //         ),
-          //         items: [
-          //           "assets/image/download.jpg",
-          //           "assets/image/image.jpg",
-          //           "assets/image/images.jpg"
-          //         ].map((i) {
-          //           return Builder(
-          //             builder: (BuildContext context) {
-          //               return Container(
-          //                 width: MediaQuery.of(context).size.width,
-          //                 margin: EdgeInsets.symmetric(horizontal: 5.0),
-          //                 child: Image.asset(
-          //                   i,
-          //                   fit: BoxFit.fill,
-          //                 ),
-          //               );
-          //             },
-          //           );
-          //         }).toList(),
-          //       )),
-          // ),
-          // Container(
-          //   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          //   child: Material(
-          //     // color: Color.fromARGB(255, 0, 109, 164),
-          //     borderRadius: BorderRadius.circular(10),
-          //     elevation: 5,
-          //     child: Column(
-          //       children: [
-          //         Container(
-          //           width: width,
-          //           padding: const EdgeInsets.symmetric(
-          //               vertical: 10, horizontal: 4),
-          //           margin: const EdgeInsets.symmetric(horizontal: 10),
-          //           child: Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: const [
-          //               Text(
-          //                 "Today's Sales",
-          //                 style: TextStyle(
-          //                     fontSize: 24, fontWeight: FontWeight.bold),
-          //               ),
-          //               Icon(Icons.format_list_bulleted)
-          //             ],
-          //           ),
-          //         ),
-          //         const Divider(
-          //           thickness: 2,
-          //         ),
-          //         Container(
-          //           color: Colors.white,
-          //           margin: const EdgeInsets.symmetric(
-          //             horizontal: 8,
-          //             vertical: 8,
-          //           ),
-          //           height: height * 0.4,
-          //           child: ListView.builder(
-          //             itemCount: 10,
-          //             itemBuilder: (context, index) {
-          //               return Container(
-          //                 height: height * 0.15,
-          //                 width: 0.2,
-          //                 // padding: EdgeInsets.symmetric(horizontal: 10),
-          //                 child: Card(
-          //                   child: Row(
-          //                     mainAxisAlignment:
-          //                         MainAxisAlignment.spaceEvenly,
-          //                     children: <Widget>[
-          //                       Expanded(
-          //                         child: Container(
-          //                           padding: EdgeInsets.all(8),
-          //                           child: Column(
-          //                             mainAxisAlignment:
-          //                                 MainAxisAlignment.spaceEvenly,
-          //                             children: [
-          //                               Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   const Text(
-          //                                     "T-Shirt ",
-          //                                     style: TextStyle(
-          //                                         fontWeight:
-          //                                             FontWeight.bold),
-          //                                   ),
-          //                                 Row(
-          //                                     children: [
-          //                                       const Text(
-          //                                         "QTY",
-          //                                         style: TextStyle(
-          //                                             fontWeight:
-          //                                                 FontWeight.bold),
-          //                                       ),
-          //                                       Card(
-          //                                         color: Colors.blue,
-          //                                         child: SizedBox(
-          //                                           child: Container(
-          //                                             padding:
-          //                                                 const EdgeInsets
-          //                                                         .symmetric(
-          //                                                     horizontal: 20,
-          //                                                     vertical: 8),
-          //                                             child: const Text(
-          //                                               "1",
-          //                                               style: TextStyle(
-          //                                                 color: Colors.white,
-          //                                               ),
-          //                                             ),
-          //                                           ),
-          //                                         ),
-          //                                       )
-          //                                     ],
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                               const Text(
-          //                                 "Here we can add the  description about the products",
-          //                               ),
-          //                             ],
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          //   child: Material(
-          //     // color: Color.fromARGB(255, 0, 109, 164),
-          //     borderRadius: BorderRadius.circular(10),
-          //     elevation: 5,
-          //     child: Column(
-          //       children: [
-          //         Container(
-          //           width: width,
-          //           padding: const EdgeInsets.symmetric(
-          //               vertical: 10, horizontal: 4),
-          //           margin: const EdgeInsets.symmetric(horizontal: 10),
-          //           child: Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: const [
-          //               Text(
-          //                 "Available's Quantity",
-          //                 style: TextStyle(
-          //                     fontSize: 24, fontWeight: FontWeight.bold),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //         const Divider(
-          //           thickness: 2,
-          //         ),
-          //         Container(
-          //           color: Colors.white,
-          //           margin: const EdgeInsets.symmetric(
-          //             horizontal: 8,
-          //             vertical: 8,
-          //           ),
-          //           height: height * 0.4,
-          //           child: ListView.builder(
-          //             itemCount: 10,
-          //             itemBuilder: (context, index) {
-          //               return Container(
-          //                 height: height * 0.15,
-          //                 width: 0.2,
-          //                 //padding: EdgeInsets.symmetric(horizontal: 10),
-          //                 child: Card(
-          //                   child: Row(
-          //                     mainAxisAlignment:
-          //                         MainAxisAlignment.spaceEvenly,
-          //                     children: <Widget>[
-          //                       Expanded(
-          //                         child: Container(
-          //                           padding: EdgeInsets.all(8),
-          //                           child: Column(
-          //                             mainAxisAlignment:
-          //                                 MainAxisAlignment.spaceEvenly,
-          //                             children: [
-          //                               Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   const Text(
-          //                                     "T-Shirt ",
-          //                                     style: TextStyle(
-          //                                         fontWeight:
-          //                                             FontWeight.bold),
-          //                                   ),
-          //                                   Row(
-          //                                     children: [
-          //                                       const Text(
-          //                                         "QTY",
-          //                                         style: TextStyle(
-          //                                             fontWeight:
-          //                                                 FontWeight.bold),
-          //                                       ),
-          //                                       Card(
-          //                                         color: const Color.fromARGB(
-          //                                             255, 0, 109, 164),
-          //                                         child: SizedBox(
-          //                                           child: Container(
-          //                                             padding:
-          //                                                 const EdgeInsets
-          //                                                         .symmetric(
-          //                                                     horizontal: 20,
-          //                                                     vertical: 8),
-          //                                             child: const Text(
-          //                                               "5",
-          //                                               style: TextStyle(
-          //                                                 color: Colors.white,
-          //                                               ),
-          //                                             ),
-          //                                           ),
-          //                                         ),
-          //                                       )
-          //                                     ],
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                               const Text(
-          //                                 "Here we can add the  description about the products",
-          //                               ),
-          //                             ],
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -1716,8 +1386,15 @@ class Fiters extends StatefulWidget {
   List<String> category;
   List<String> subCategory;
   List<String> team;
-  Fiters(
-      {required this.category, required this.subCategory, required this.team});
+  List<String> color;
+  List<String> size;
+  Fiters({
+    required this.category,
+    required this.subCategory,
+    required this.team,
+    required this.color,
+    required this.size,
+  });
   @override
   State<Fiters> createState() => _FitersState();
 }
@@ -1727,33 +1404,47 @@ class _FitersState extends State<Fiters> {
   String selectedCategory = "CATEGOFY";
   String selectedSubCategory = "SUB-CATEGORY";
   String selectedPeople = "SALES BY";
+  String selectedColor = "COLOR";
+  String selectedSize = "SIZE";
 
-  void itemChanges(bool isSelected, String itemValue) {
-    setState(() {
-      if (isSelected) {
-        selectedItems.add(itemValue);
-      } else {
-        selectedItems.remove(itemValue);
-      }
-    });
-  }
+  // void itemChanges(bool isSelected, String itemValue) {
+  //   setState(() {
+  //     if (isSelected) {
+  //       selectedItems.add(itemValue);
+  //     } else {
+  //       selectedItems.remove(itemValue);
+  //     }
+  //   });
+  // }
 
   void cancel() {
     Navigator.pop(context);
   }
 
-  void submit() {
-    Navigator.pop(context, selectedItems);
-  }
-
   void clear() {
-    setState(() {
-      selectedItems = [];
-      Navigator.pop(context, selectedItems);
-    });
+    setState(
+      () {
+        selectedItems = [];
+        Navigator.pop(context, selectedItems);
+      },
+    );
   }
 
   bool isPresent = false;
+
+  var filterCont;
+
+  @override
+  void initState() {
+    filterCont = Provider.of<Controller>(context, listen: false);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void submit() {
+    filterCont.availableStocksData(filterCont.cateEndPoint);
+    Navigator.pop(context, selectedItems);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1805,9 +1496,12 @@ class _FitersState extends State<Fiters> {
                         );
                       }).toList(),
                       onChanged: (items) {
-                        setState(() {
-                          selectedCategory = items as String;
-                        });
+                        setState(
+                          () {
+                            selectedCategory = items as String;
+                            filterCont.cateEndPointCahnge(selectedCategory);
+                          },
+                        );
                       },
                     ),
                   ),
@@ -1846,23 +1540,6 @@ class _FitersState extends State<Fiters> {
                         onTap: () {
                           if (items.value != selectedSubCategory) {
                             selectedItems.add(items.value);
-                            for (int i = 0; i < selectedItems.length; i++) {
-                              for (int j = 0;
-                                  j < widget.subCategory.length;
-                                  j++) {
-                                if (selectedItems[i] == items.value) {
-                                  isPresent = true;
-                                  break;
-                                } else {
-                                  // if(selectedItems)
-                                  selectedItems.remove(widget.subCategory[j]);
-                                }
-                              }
-                              if (isPresent == true) {
-                                isPresent = false;
-                                break;
-                              }
-                            }
                           }
                         },
                         child: Text(items.value),
@@ -1924,33 +1601,106 @@ class _FitersState extends State<Fiters> {
                 ),
               ),
             ),
-            // ListBody(
-            //   children: widget.category
-            //       .map(
-            //         (item) => CheckboxListTile(
-            //           activeColor: iconColor,
-            //           value: selectedItems.contains(item),
-            //           title: Text(item),
-            //           controlAffinity: ListTileControlAffinity.leading,
-            //           onChanged: (isChecked) => itemChanges(isChecked!, item),
-            //         ),
-            //       )
-            //       .toList(),
-            // ),
-            // Text("Sold By"),
-            // ListBody(
-            //   children: widget.subCategory
-            //       .map(
-            //         (item) => CheckboxListTile(
-            //           activeColor: iconColor,
-            //           value: selectedItems.contains(item),
-            //           title: Text(item),
-            //           controlAffinity: ListTileControlAffinity.leading,
-            //           onChanged: (isChecked) => itemChanges(isChecked!, item),
-            //         ),
-            //       )
-            //       .toList(),
-            //),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Material(
+                elevation: 5,
+                child: Container(
+                  height: height * 0.05,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      // Initial Value
+                      // value: dropdownvalue,
+
+                      hint: Text(selectedColor),
+                      iconDisabledColor: Colors.white,
+                      iconEnabledColor: Colors.white,
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+
+                      // Array list of items
+                      items: widget.color.asMap().entries.map((items) {
+                        String value = items.value;
+                        int key = items.key;
+                        return DropdownMenuItem(
+                          value: items.value,
+                          onTap: () {
+                            if (items.value != selectedColor) {
+                              if (selectedItems.contains(items.value) ==
+                                  false) {
+                                selectedItems.add(items.value);
+                              }
+                            }
+                          },
+                          child: Text(items.value),
+                        );
+                      }).toList(),
+                      onChanged: (items) {
+                        setState(() {
+                          selectedColor = items as String;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Material(
+                elevation: 5,
+                child: Container(
+                  height: height * 0.05,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      // Initial Value
+                      // value: dropdownvalue,
+
+                      hint: Text(selectedSize),
+                      iconDisabledColor: Colors.white,
+                      iconEnabledColor: Colors.white,
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+
+                      // Array list of items
+                      items: widget.size.asMap().entries.map((items) {
+                        String value = items.value;
+                        int key = items.key;
+                        return DropdownMenuItem(
+                          value: items.value,
+                          onTap: () {
+                            if (items.value != selectedSize) {
+                              if (selectedItems.contains(items.value) ==
+                                  false) {
+                                selectedItems.add(items.value);
+                              }
+                            }
+                          },
+                          child: Text(items.value),
+                        );
+                      }).toList(),
+                      onChanged: (items) {
+                        setState(() {
+                          selectedSize = items as String;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
