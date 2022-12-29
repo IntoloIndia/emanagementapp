@@ -12,9 +12,9 @@ class Category extends Equatable {
   List<Object> get props => [id, name];
 
   static List<Category> categories = [
-    Category(id: 1, name: "abhishek"),
-    Category(id: 2, name: "Shubham"),
-    Category(id: 3, name: "Umer"),
+    Category(id: 1, name: "Shirt"),
+    Category(id: 2, name: "T-shirt"),
+    Category(id: 3, name: "Jeans"),
   ];
 }
 
@@ -40,7 +40,7 @@ class CategoryFilter extends Equatable {
       .map((category) =>
           CategoryFilter(id: category.id, category: category, value: false))
       .toList();
-      
+
   // static List<CategoryFilter> catego ries = [
   //   CategoryFilter(id: 1, name: "abhishek"),
   //   CategoryFilter(id: 2, name: "Shubham"),
@@ -59,12 +59,12 @@ class Price extends Equatable {
   });
 
   @override
-   List<Object?> get props => [id, price];
-   static List<Price> prices = [
+  List<Object?> get props => [id, price];
+  static List<Price> prices = [
     Price(id: 1, price: '10'),
     Price(id: 2, price: '20'),
     Price(id: 3, price: '30'),
-   ];
+  ];
 }
 
 class PriceFilter extends Equatable {
@@ -72,8 +72,7 @@ class PriceFilter extends Equatable {
   final Price price;
   final bool value;
 
-  PriceFilter(
-      {required this.id, required this.price, required this.value});
+  PriceFilter({required this.id, required this.price, required this.value});
 
   PriceFilter copyWidth({int? id, Price? price, bool? value}) {
     return PriceFilter(
@@ -86,8 +85,7 @@ class PriceFilter extends Equatable {
   List<Object> get props => [id, price, value];
 
   static List<PriceFilter> filters = Price.prices
-      .map((price) =>
-          PriceFilter(id: price.id, price: price, value: false))
+      .map((price) => PriceFilter(id: price.id, price: price, value: false))
       .toList();
   // static List<CategoryFilter> catego ries = [
   //   CategoryFilter(id: 1, name: "abhishek"),

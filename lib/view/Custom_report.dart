@@ -1,5 +1,7 @@
+import 'package:emanagementapp/view/datepicker.dart';
 import 'package:emanagementapp/view/todayreport.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CustomReport extends StatelessWidget {
   CustomReport({super.key});
@@ -25,12 +27,30 @@ class CustomReport extends StatelessWidget {
           children: [
             Card(
               child: Center(
-                  child: Container(
-                      margin: EdgeInsets.all(10),
-                      width: width,
-                      child: const Align(
-                          alignment: Alignment.center,
-                          child: Text('Custom Reports')))),
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  width: width,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Custom Reports'),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return DatePicker();
+                                      },
+                                    );
+                            },
+                            icon: Icon(Icons.calendar_month_outlined))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
             Card(
               child: Container(
@@ -51,17 +71,24 @@ class CustomReport extends StatelessWidget {
                       color: Colors.black12,
                     ),
                     Table(
-                      columnWidths: {
-                        0: FractionColumnWidth(.45),
-                        1: FractionColumnWidth(.45),
-                        2: FractionColumnWidth(.2),
+                      columnWidths: const {
+                        0 : FractionColumnWidth(.45),
+
+                        1 : FractionColumnWidth(.45),
+
+                        2 : FractionColumnWidth(.2),
+                        
                       },
                       children: [
                         const TableRow(
                           children: [
+
                             Text("1.T-shirt"),
+
                             Text("#123456"),
+
                             Text("1000"),
+
                           ],
                         ),
                         rowSpacer,
@@ -118,7 +145,7 @@ class CustomReport extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text("Product Sold  3"),
                         Text("1700 rs  Total")
                       ],

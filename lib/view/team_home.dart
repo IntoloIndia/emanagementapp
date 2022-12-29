@@ -11,7 +11,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:http/http.dart' as http;
 
-import 'login.dart';
+import '../login.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

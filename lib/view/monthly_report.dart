@@ -52,9 +52,11 @@ class MonthlyReport extends StatelessWidget {
                     ),
                     Table(
                       columnWidths: {
+
                         0: FractionColumnWidth(.45),
                         1: FractionColumnWidth(.45),
                         2: FractionColumnWidth(.2),
+                        
                       },
                       children: [
                         const TableRow(
