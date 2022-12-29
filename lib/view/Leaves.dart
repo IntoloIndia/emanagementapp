@@ -897,8 +897,8 @@ class _CalState extends State<Cal> {
   /// Returns the builder for month cell.
   Widget _monthCellBuilder(
       BuildContext buildContext, MonthCellDetails details) {
-    final Color backgroundColor =
-        _getMonthCellBackgroundColor(details.date, absent, present, leave);
+    final Color backgroundColor = _getMonthCellBackgroundColor(
+        details.date, absent, present, leave, festiveLeaves);
     return Container(
       decoration: BoxDecoration(
           color: backgroundColor,
@@ -913,18 +913,21 @@ class _CalState extends State<Cal> {
   }
 
   Color _getMonthCellBackgroundColor(
-      DateTime date, List abs, List pres, List lvs) {
+      DateTime date, List abs, List pres, List lvs, List fLeaves) {
     Color col = const Color.fromARGB(255, 224, 224, 224);
     for (var i = 0; i < pres.length; i++) {
       for (var j = 0; j < abs.length; j++) {
         for (var k = 0; k < lvs.length; k++) {
-          if (date.day == pres[i]) {
-            col = kGreen;
-          } else if (date.day == abs[j]) {
-            col = kRed;
-          } else if (date.day == lvs[k]) {
-            col = kBlue;
-          }
+          for (var l = 0; l < fLeaves.length; l++)
+            if (date.day == pres[i]) {
+              col = kGreen;
+            } else if (date.day == abs[j]) {
+              col = kRed;
+            } else if (date.day == lvs[k]) {
+              col = kBlue;
+            } else if (date.day == fLeaves[k]) {
+              col = Colors.black38;
+            }
         }
       }
     }

@@ -94,20 +94,21 @@ class _LoginPageState extends State<LoginPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        
         // appBar: AppBar(
         //   elevation: 0,
         //   backgroundColor: bgColor,
         //   toolbarHeight: 5,
-
         // ),
+
         body: SingleChildScrollView(
           child: SafeArea(
             child: Container(
               child: Column(children: [
-                SizedBox(
+                 SizedBox(
                   height: height * 0.15,
-                ),
-                Text(
+                 ),
+                const Text(
                   "MangalDeep Clothes",
                   style: TextStyle(
                       fontSize: 30,

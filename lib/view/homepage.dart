@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   void _onItemTapped(int index) {
     setState(
       () {
@@ -50,6 +49,11 @@ class _HomePageState extends State<HomePage> {
         items: [
           FloatingNavbarItem(icon: Icons.home, title: 'Home'),
           FloatingNavbarItem(icon: Icons.explore, title: 'Stocks'),
+          FloatingNavbarItem(icon: Icons.person, title: 'Customer'),
           FloatingNavbarItem(icon: Icons.analytics_outlined, title: 'Report'),
           FloatingNavbarItem(icon: Icons.group, title: '  HR  '),
-        ],),);}}
+        ],
+      ),
+    );
+  }
+}

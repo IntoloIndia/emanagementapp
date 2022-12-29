@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:emanagementapp/model/size_model.dart';
 
-ColorModel sizeModelFromJson(String str) => ColorModel.fromJson(json.decode(str));
+ColorModel colorModelFromJson(String str) => ColorModel.fromJson(json.decode(str));
 
 String sizeModelToJson(ColorModel data) => json.encode(data.toJson());
 

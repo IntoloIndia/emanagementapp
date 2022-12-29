@@ -1,3 +1,4 @@
+import 'package:emanagementapp/model/brand_model.dart';
 import 'package:emanagementapp/view/stocksmanage.dart';
 import 'package:emanagementapp/view/Leaves.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/controller.dart';
+import '../controller/filter_controller.dart';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+
+import '../model/category.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,20 +23,22 @@ class _HomeState extends State<Home> {
   List items1 = [];
 
   List<String>? ab;
-  var cont;
+  // var cont;
 
   @override
   void initState() {
-    cont = Provider.of<Controller>(context, listen: false);
-    Provider.of<Controller>(context, listen: false)
-        .availableStocksData(cont.cateEndPoint);
+    var cont = Provider.of<FilterController>(context, listen: false);
+    // Provider.of<FilterController>(context, listen: false)
+    //     .getListAvailableSubCategory();
+
+    Provider.of<Controller>(context, listen: false).availableStocksData();
     Provider.of<Controller>(context, listen: false).getCategoryData();
     Provider.of<Controller>(context, listen: false).getSubCategory();
     Provider.of<Controller>(context, listen: false).getTodaySales();
     Provider.of<Controller>(context, listen: false).getColorCategory();
     Provider.of<Controller>(context, listen: false).getSizeCategory();
-
     // TODO: implement initState
+
     super.initState();
   }
 
@@ -43,9 +52,13 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var cont = Provider.of<Controller>(context, listen: false);
 
-    final available =
-        Provider.of<Controller>(context, listen: true).availableStocks;
+    print("object");
+    // print(cont.subCategory);
+
+    // final available =
+    //     Provider.of<Controller>(context, listen: true).availableStocks;
     final availableSubCategory =
         Provider.of<Controller>(context, listen: true).subCategory;
     final availableCategory =
@@ -61,12 +74,12 @@ class _HomeState extends State<Home> {
 
     var containerHeight;
 
-    if (available.data != null) {
-      if (available.data!.length == 2) {
+    if (cont.availableStocks.data != null) {
+      if (cont.availableStocks.data!.length == 2) {
         containerHeight = height * 0.2;
-      } else if (available.data!.length == 1) {
+      } else if (cont.availableStocks.data!.length == 1) {
         containerHeight = height * 0.1;
-      } else if (available.data!.length > 2) {
+      } else if (cont.availableStocks.data!.length > 2) {
         containerHeight = height * 0.25;
       }
     }
@@ -196,15 +209,17 @@ class _HomeState extends State<Home> {
           // ),
           GestureDetector(
             onTap: () {
-              setState(() {
-                tSalesAnimatedheight = height * 0.5;
-                tSalesAnimatedheight = width * 0.4;
-                if (isToday == false) {
-                  isToday = true;
-                } else {
-                  isToday = false;
-                }
-              });
+              setState(
+                () {
+                  tSalesAnimatedheight = height * 0.5;
+                  tSalesAnimatedheight = width * 0.4;
+                  if (isToday == false) {
+                    isToday = true;
+                  } else {
+                    isToday = false;
+                  }
+                },
+              );
             },
             child: Card(
               shape: RoundedRectangleBorder(
@@ -257,8 +272,8 @@ class _HomeState extends State<Home> {
                                           ? "${0}\u{20B9}"
                                           : "${todaySales.data!.length}\u{20B9}",
                                       style: TextStyle(
-                                          // color: Colors.white,
-                                          // fontWeight: FontWeight.w600
+                                          // color : Colors.white,
+                                          // fontWeight : FontWeight.w600
                                           ),
                                     ),
                                   ),
@@ -363,7 +378,7 @@ class _HomeState extends State<Home> {
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 5,
                                       ),
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         border: Border(
                                           left: BorderSide(
                                               color: iconColor, width: 5),
@@ -467,16 +482,14 @@ class _HomeState extends State<Home> {
                                                       .spaceBetween,
                                               children: [
                                                 const Text("Price :  600"),
-                                                Container(
-                                                  child: Row(
-                                                    children: [
-                                                      Text("11/19/2022"),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text("12.00 pm "),
-                                                    ],
-                                                  ),
+                                                Row(
+                                                  children: const [
+                                                    Text("11/19/2022"),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text("12.00 pm "),
+                                                  ],
                                                 )
                                               ],
                                             )
@@ -731,61 +744,6 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ]
-                    // Card(
-                    //   shape: RoundedRectangleBorder(
-                    //     side: const BorderSide(
-                    //       color: Colors.black12,
-                    //     ),
-                    //     borderRadius:
-                    //         BorderRadius.circular(20.0), //<-- SEE HERE
-                    //   ),
-                    //   child: Container(
-                    //     margin: EdgeInsets.all(10),
-                    //     child: Column(
-                    //       children: [
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Text("1. T-shirt"),
-                    //             CircleAvatar(
-                    //               minRadius: 15,
-                    //               backgroundColor: Colors.black87,
-                    //               child: Text(
-                    //                 "Xl",
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             ),
-                    //             CircleAvatar(
-                    //               minRadius: 15,
-                    //               backgroundColor: Colors.blueAccent,
-                    //               child: Text(""),
-                    //             )
-                    //           ],
-                    //         ),
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Text("Price :  600"),
-                    //             Container(
-                    //               decoration: BoxDecoration(
-                    //                 color: Colors.black54,
-                    //                 borderRadius: BorderRadius.circular(10),
-                    //               ),
-                    //               margin: EdgeInsets.only(top: 3),
-                    //               padding: EdgeInsets.all(10),
-                    //               child: Text(
-                    //                 "S1",
-                    //                 style: TextStyle(
-                    //                   color: Colors.white,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -942,9 +900,9 @@ class _HomeState extends State<Home> {
                                         vertical: height * 0.015,
                                         horizontal: width * 0.04),
                                     child: Text(
-                                      available.data == null
+                                      cont.availableStocks.data == null
                                           ? "${0}"
-                                          : "${available.data!.length}",
+                                          : "${cont.availableStocks.data!.length}",
                                       style: const TextStyle(),
                                     ),
                                   ),
@@ -994,23 +952,41 @@ class _HomeState extends State<Home> {
                                           .toString());
                                     }
 
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) =>
+                                    //           const BuildFilter()),
+                                    // );
+
                                     final List<String> ab = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Fiters(
-                                          category: otherIt,
-                                          subCategory: otherIt2,
-                                          team: otherIt3,
-                                          color: otherIt4,
-                                          size: otherIt5,
-                                        );
+                                            category: otherIt,
+                                            subCategory: otherIt2,
+                                            team: otherIt3,
+                                            color: otherIt4,
+                                            size: otherIt5,
+                                            cate: cont.cateEndPointCahnge,
+                                            subCate: cont.subCateEndPointCahnge,
+                                            colorCate:
+                                                cont.ColorCateEndPointCahnge,
+                                            sizeCate:
+                                                cont.SizeCateEndPointCahnge,
+                                            submit: cont.filterData,
+                                            cancel: cont.setValuesEmpty,
+                                            brand:
+                                                cont.brandCateEndPointCahnge);
                                       },
                                     );
+
                                     setState(
                                       () {
                                         items1 = ab;
                                         print("guestDFac");
-                                        print(ab);
+                                        // print(cont.selc);
+                                        // print(ab);
                                       },
                                     );
                                   },
@@ -1023,10 +999,12 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     if (isAvailable == true) ...[
-                      if (available.data == null) ...[
+                      if (cont.availableStocks.data == null) ...[
                         CircularProgressIndicator(),
                       ] else ...[
-                        for (int i = 0; i < available.data!.length; i++) ...{
+                        for (int i = 0;
+                            i < cont.availableStocks.data!.length;
+                            i++) ...{
                           Card(
                             child: ClipPath(
                               clipper: ShapeBorderClipper(
@@ -1051,18 +1029,20 @@ class _HomeState extends State<Home> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                              "${i + 1}.${available.data![i].product}"),
+                                              "${i + 1}.${cont.availableStocks.data![i].product}"),
                                           Container(
                                             child: Row(
                                               children: [
                                                 CircleAvatar(
                                                   minRadius: 15,
-                                                  backgroundColor: Color(available
-                                                              .data![i].color ==
+                                                  backgroundColor: Color(cont
+                                                              .availableStocks
+                                                              .data![i]
+                                                              .color ==
                                                           null
                                                       ? 0xFFFFFFFF
                                                       : int.parse("0xFF" +
-                                                          "${available.data![i].color.toString().substring(1, available.data![i].color.toString().length)}")),
+                                                          "${cont.availableStocks.data![i].color.toString().substring(1, cont.availableStocks.data![i].color.toString().length)}")),
                                                   child: Text(""),
                                                 ),
                                                 const SizedBox(
@@ -1073,7 +1053,7 @@ class _HomeState extends State<Home> {
                                                   backgroundColor:
                                                       Colors.black87,
                                                   child: Text(
-                                                    "${available.data![i].size}",
+                                                    "${cont.availableStocks.data![i].size}",
                                                     style: const TextStyle(
                                                         color: Colors.white),
                                                   ),
@@ -1091,7 +1071,7 @@ class _HomeState extends State<Home> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "Price : ${available.data![i].salesPrice}",
+                                            "Price : ${cont.availableStocks.data![i].salesPrice}",
                                           ),
                                         ],
                                       )
@@ -1388,34 +1368,96 @@ class Fiters extends StatefulWidget {
   List<String> team;
   List<String> color;
   List<String> size;
-  Fiters({
-    required this.category,
-    required this.subCategory,
-    required this.team,
-    required this.color,
-    required this.size,
-  });
+
+  Function? cate;
+  Function? subCate;
+  Function? colorCate;
+  Function? sizeCate;
+  Function? submit;
+  Function? brand;
+  Function? cancel;
+
+  Fiters(
+      {required this.category,
+      required this.subCategory,
+      required this.team,
+      required this.color,
+      required this.size,
+      Function? this.cate,
+      Function? this.subCate,
+      Function? this.colorCate,
+      Function? this.sizeCate,
+      Function? this.submit,
+      Function? this.cancel,
+      Function? this.brand});
   @override
   State<Fiters> createState() => _FitersState();
 }
 
 class _FitersState extends State<Fiters> {
   List<String> selectedItems = [];
-  String selectedCategory = "CATEGOFY";
+  List<String> brandsList = [];
+
   String selectedSubCategory = "SUB-CATEGORY";
   String selectedPeople = "SALES BY";
   String selectedColor = "COLOR";
   String selectedSize = "SIZE";
+  String selectedCategory = "CATEGOFY";
+  String selectedBrand = "BRAND";
 
-  // void itemChanges(bool isSelected, String itemValue) {
-  //   setState(() {
-  //     if (isSelected) {
-  //       selectedItems.add(itemValue);
-  //     } else {
-  //       selectedItems.remove(itemValue);
-  //     }
-  //   });
-  // }
+  List ListAvailableSubCategory = [];
+
+  Future? SubCate;
+
+  int availableSubCategoryId = 0;
+
+  Future<void> setSubCategoryId(
+      {required String it, required Function fn}) async {
+    final response =
+        await http.get(Uri.parse("${dotenv.env["APP_URL"]}get-category"));
+    if (response.statusCode == 200) {
+      // final jsonResponse = jsonDecode(response.body);
+      final ApiData = categoryFromJson(response.body);
+
+      for (int i = 0; i < ApiData.data!.length; i++) {
+        if (ApiData.data![i].category == it) {
+          availableSubCategoryId = ApiData.data![i].id!;
+          final res = await http.get(Uri.parse(
+              "${dotenv.env["APP_URL"]}get-sub-category/$availableSubCategoryId"));
+          if (res.statusCode == 200) {
+            final sipData = subCategoryFromJson(res.body);
+
+            ListAvailableSubCategory = [];
+
+            for (int i = 0; i < sipData.data!.length; i++) {
+              if (ListAvailableSubCategory.contains(
+                      sipData.data![i].subCategory) ==
+                  false) {
+                setState(() {
+                  ListAvailableSubCategory.add(sipData.data![i].subCategory);
+                });
+              }
+            }
+            print("ListAvailableSubCategory");
+            print(ListAvailableSubCategory);
+          }
+          break;
+        }
+      }
+    } else {}
+  }
+
+  Future<void> setBrand() async {
+    final response =
+        await http.get(Uri.parse("${dotenv.env["APP_URL"]}get-brand"));
+    if (response.statusCode == 200) {
+      final ApiData = brandsModelFromJson(response.body);
+
+      for (int i = 0; i < ApiData.data!.length; i++) {
+        brandsList.add(ApiData.data![i].brandName.toString());
+      }
+    } else {}
+  }
 
   void cancel() {
     Navigator.pop(context);
@@ -1432,47 +1474,49 @@ class _FitersState extends State<Fiters> {
 
   bool isPresent = false;
 
-  var filterCont;
-
   @override
   void initState() {
-    filterCont = Provider.of<Controller>(context, listen: false);
+    setBrand();
     // TODO: implement initState
     super.initState();
   }
 
   void submit() {
-    filterCont.availableStocksData(filterCont.cateEndPoint);
+    widget.submit!();
+    // filterCont.filterData();
+    // filterCont.availableStocksData();
     Navigator.pop(context, selectedItems);
+
+    widget.cancel!();
+    // filterCont.setValuesEmpty();
   }
 
   @override
   Widget build(BuildContext context) {
+    var filterCont = Provider.of<Controller>(context, listen: true);
+    var cont = Provider.of<FilterController>(context, listen: true);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return AlertDialog(
-      title: const Text("Filter"),
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Text("Category"),
-            // SizedBox(
-            //   height: 10,
-            // ),
-            Center(
-              child: Material(
+    print("abhishek");
+    return StatefulBuilder(builder: (context, setState) {
+      return AlertDialog(
+        title: const Text("Filter"),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              Material(
                 elevation: 5,
                 child: Container(
                   height: height * 0.05,
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
                       // Initial Value
                       // value: dropdownvalue,
-                      hint: Text(selectedCategory),
+                      hint: Text(selectedCategory.toString()),
                       iconDisabledColor: Colors.white,
                       iconEnabledColor: Colors.white,
                       // Down Arrow Icon
@@ -1485,7 +1529,9 @@ class _FitersState extends State<Fiters> {
                         return DropdownMenuItem(
                           value: items.value,
                           onTap: () {
-                            if (items.value != selectedCategory) {
+                            // cont.setSubCategoryId(items.value.toString());
+
+                            if (items.value != filterCont.selectedCategory) {
                               if (selectedItems.contains(items.value) ==
                                   false) {
                                 selectedItems.add(items.value);
@@ -1498,114 +1544,131 @@ class _FitersState extends State<Fiters> {
                       onChanged: (items) {
                         setState(
                           () {
-                            selectedCategory = items as String;
-                            filterCont.cateEndPointCahnge(selectedCategory);
+                            setSubCategoryId(
+                                it: items.toString(),
+                                fn: () {
+                                  setState(() {});
+                                });
+
+                            selectedCategory = items.toString();
                           },
                         );
+
+                        // filterCont.setSub(items.toString());
+
+                        widget.cate!(items.toString());
                       },
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Material(
-              elevation: 5,
-              child: Container(
-                height: height * 0.05,
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    // Initial Value
-                    // value: dropdownvalue,
-                    hint: Text(selectedSubCategory),
-                    iconDisabledColor: Colors.white,
-                    iconEnabledColor: Colors.white,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  child: Material(
+                    elevation: 5,
+                    child: Container(
+                      height: height * 0.05,
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          hint: Text(selectedSubCategory),
+                          iconDisabledColor: Colors.white,
+                          iconEnabledColor: Colors.white,
+                          // Down Arrow Icon
+                          icon: const Icon(Icons.keyboard_arrow_down),
 
-                    // Array list of items
+                          // Array list of items
 
-                    items: widget.subCategory.asMap().entries.map((items) {
-                      String value = items.value;
-                      int key = items.key;
+                          items: ListAvailableSubCategory.asMap()
+                              .entries
+                              .map((ele) {
+                            String value = ele.value;
+                            int key = ele.key;
 
-                      return DropdownMenuItem(
-                        value: items.value,
-                        onTap: () {
-                          if (items.value != selectedSubCategory) {
-                            selectedItems.add(items.value);
-                          }
-                        },
-                        child: Text(items.value),
-                      );
-                    }).toList(),
-                    onChanged: (items) {
-                      setState(() {
-                        selectedSubCategory = items as String;
-                      });
-                    },
+                            return DropdownMenuItem(
+                              value: ele.value,
+                              onTap: () {
+                                if (ele.value != selectedSubCategory) {
+                                  selectedItems.add(ele.value);
+                                }
+                              },
+                              child: Text(ele.value),
+                            );
+                          }).toList(),
+                          onChanged: (items) {
+                            setState(() {
+                              selectedSubCategory = items as String;
+
+                              print(selectedSubCategory);
+
+                              widget.subCate!(selectedSubCategory.toString());
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Material(
-              elevation: 5,
-              child: Container(
-                height: height * 0.05,
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    // Initial Value
-                    // value: dropdownvalue,
-                    hint: Text(selectedPeople),
-                    iconDisabledColor: Colors.white,
-                    iconEnabledColor: Colors.white,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                child: Material(
+                  elevation: 5,
+                  child: Container(
+                    height: height * 0.05,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        hint: Text(selectedBrand),
+                        iconDisabledColor: Colors.white,
+                        iconEnabledColor: Colors.white,
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
 
-                    // Array list of items
+                        // Array list of items
 
-                    items: widget.team.asMap().entries.map((items) {
-                      String value = items.value;
-                      int key = items.key;
-                      return DropdownMenuItem(
-                        value: items.value,
-                        onTap: () {
-                          if (items.value != selectedSubCategory) {
-                            if (selectedItems.contains(items.value) == false) {
-                              selectedItems.add(items.value);
-                            }
-                          }
+                        items: brandsList.asMap().entries.map((ele) {
+                          String value = ele.value;
+                          int key = ele.key;
+
+                          return DropdownMenuItem(
+                            value: ele.value,
+                            onTap: () {
+                              if (ele.value != selectedBrand) {
+                                selectedItems.add(ele.value);
+                              }
+                            },
+                            child: Text(ele.value),
+                          );
+                        }).toList(),
+                        onChanged: (items) {
+                          setState(() {
+                            selectedBrand = items.toString();
+                            widget.brand!(items.toString());
+                            print(selectedBrand);
+                          });
                         },
-                        child: Text(items.value),
-                      );
-                    }).toList(),
-                    onChanged: (items) {
-                      setState(() {
-                        selectedPeople = items as String;
-                      });
-                    },
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Material(
+              const SizedBox(
+                height: 10,
+              ),
+              Material(
                 elevation: 5,
                 child: Container(
                   height: height * 0.05,
@@ -1617,7 +1680,6 @@ class _FitersState extends State<Fiters> {
                     child: DropdownButton(
                       // Initial Value
                       // value: dropdownvalue,
-
                       hint: Text(selectedColor),
                       iconDisabledColor: Colors.white,
                       iconEnabledColor: Colors.white,
@@ -1644,18 +1706,18 @@ class _FitersState extends State<Fiters> {
                       onChanged: (items) {
                         setState(() {
                           selectedColor = items as String;
+                          widget.colorCate!(selectedColor.toString());
+                          // filterCont.ColorCateEndPointCahnge(selectedColor);
                         });
                       },
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Material(
+              const SizedBox(
+                height: 10,
+              ),
+              Material(
                 elevation: 5,
                 child: Container(
                   height: height * 0.05,
@@ -1667,65 +1729,73 @@ class _FitersState extends State<Fiters> {
                     child: DropdownButton(
                       // Initial Value
                       // value: dropdownvalue,
-
                       hint: Text(selectedSize),
                       iconDisabledColor: Colors.white,
-                      iconEnabledColor: Colors.white,
+                      iconEnabledColor: Color.fromRGBO(255, 255, 255, 1),
+
                       // Down Arrow Icon
+
                       icon: const Icon(Icons.keyboard_arrow_down),
 
                       // Array list of items
-                      items: widget.size.asMap().entries.map((items) {
-                        String value = items.value;
-                        int key = items.key;
-                        return DropdownMenuItem(
-                          value: items.value,
-                          onTap: () {
-                            if (items.value != selectedSize) {
-                              if (selectedItems.contains(items.value) ==
-                                  false) {
-                                selectedItems.add(items.value);
+
+                      items: widget.size.asMap().entries.map(
+                        (items) {
+                          String value = items.value;
+                          int key = items.key;
+                          return DropdownMenuItem(
+                            value: items.value,
+                            onTap: () {
+                              if (items.value != selectedSize) {
+                                if (selectedItems.contains(items.value) ==
+                                    false) {
+                                  selectedItems.add(items.value);
+                                }
                               }
-                            }
-                          },
-                          child: Text(items.value),
-                        );
-                      }).toList(),
+                            },
+                            child: Text(items.value),
+                          );
+                        },
+                      ).toList(),
                       onChanged: (items) {
                         setState(() {
                           selectedSize = items as String;
+                          widget.sizeCate!(selectedSize.toString());
+                          // filterCont.SizeCateEndPointCahnge(selectedSize);
                         });
                       },
                     ),
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        actions: [
+
+          const SizedBox(
+            width: 10,
+          ),
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(iconColor),
             ),
-          ],
-        ),
-      ),
-      actions: [
-        const SizedBox(
-          width: 10,
-        ),
-        TextButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(iconColor),
+            onPressed: cancel,
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-          onPressed: cancel,
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: Colors.white),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(iconColor),
+            ),
+            onPressed: submit,
+            child: const Text('Submit'),
           ),
-        ),
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(iconColor),
-          ),
-          onPressed: submit,
-          child: const Text('Submit'),
-        ),
-      ],
-    );
+        
+        ],
+      );
+    });
   }
 }

@@ -16,13 +16,14 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  // ignore: prefer_final_fields
   int index = 0;
   final screens = [const Home(), Cal(), Porfile()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       backgroundColor: bgColor,
+
       appBar: AppBar(
         // leading: Text(
         //   'i',
@@ -33,7 +34,7 @@ class _NavBarState extends State<NavBar> {
         backgroundColor: themeColor,
         centerTitle: true,
         title: Column(
-          children: [
+          children: const [
             Text(
               'i - man',
               style: TextStyle(fontSize: 18, color: appBarTextColor),
@@ -42,7 +43,7 @@ class _NavBarState extends State<NavBar> {
               'MANGALDEEP CLOTHES LLP',
               style: TextStyle(
                   fontWeight: FontWeight.w500, color: appBarTextColor),
-            ),
+              ),
           ],
         ),
         // actions: [
@@ -73,8 +74,7 @@ class _NavBarState extends State<NavBar> {
       ),
       body: screens[index],
       bottomNavigationBar: FloatingNavbar(
-        // elevation: ,
-        margin: EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
         fontSize: 16,
         iconSize: 28,
         borderRadius: 0,

@@ -1,3 +1,4 @@
+import 'package:emanagementapp/view/customer_bills.dart';
 import 'package:flutter/material.dart';
 
 import 'package:emanagementapp/view/Leaves.dart';
@@ -22,12 +23,15 @@ bool admLogin = true;
 List displayScreens = [
   Home(),
   Stocks(),
-  const Reports(),
-  const Leaves(),
+  CustomerBills(),
+  Reports(),
+  Leaves(),
 ];
 
 List absent = [11, 18, 25, 5];
+
 List leave = [14, 15, 16];
+
 List present = [
   1,
   2,
@@ -51,6 +55,16 @@ List present = [
   27,
   28,
   29,
-  30
+  30,
 ];
-int i = 0;
+
+List festiveLeaves = [
+  8,
+  20,
+  28,
+];
+
+
+// Future<void> getData( ) async {
+
+// }
